@@ -1,0 +1,7 @@
+Bundle-Name: test
+Bundle-SymbolicName: test
+Bundle-Version: 1.0.0
+Export-Package: test.constants
+-includeresource:\
+	@com.liferay.util.taglib-[0-9\.]*.jar!/META-INF/*.tld
+-privatepackage: com.liferay.util.bridges.freemarker
