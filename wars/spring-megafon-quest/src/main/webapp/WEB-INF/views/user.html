@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div xmlns:th="http://www.thymeleaf.org">
+    <p th:text="#{todays-date-is(${todaysDate})}" />
+</div>
+
+<div xmlns:th="http://www.thymeleaf.org">
 	<form th:id="|${namespace}mainForm|" th:action="${mainFormActionURL}" class="user-form" method="post" th:object="${user}">
-		<span class="portlet-msg-error" th:if="${#fields.hasGlobalErrors()}" th:errors="*{global}"/>
-		<p class="caption" th:text="#{personal-information}"/>
+        <p class="caption" th:text="#{personal-information}"/>
+        <span class="portlet-msg-error" th:if="${#fields.hasGlobalErrors()}" th:errors="*{global}"/>
 		<fieldset>
 			<div class="form-group">
 				<label th:for="|${namespace}firstName|" path="firstName" th:text="#{first-name}"/>

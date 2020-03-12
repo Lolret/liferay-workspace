@@ -1,8 +1,6 @@
 package spring.test.controller;
 
-import com.liferay.portal.kernel.util.Time;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -28,18 +26,15 @@ import java.util.Locale;
  * @author Akadmon
  */
 @Controller
+@Slf4j
 @RequestMapping("VIEW")
 public class UserController {
-
-    private static final Logger _logger = LoggerFactory.getLogger(
-            UserController.class);
 
     @Autowired
     private LocalValidatorFactoryBean _localValidatorFactoryBean;
 
     @Autowired
     private MessageSource _messageSource;
-
 
     @ModelAttribute("user")
     public User getUserModelAttribute() {
@@ -51,6 +46,7 @@ public class UserController {
 
         modelMap.put("mainFormActionURL", renderResponse.createActionURL());
         modelMap.put("namespace", renderResponse.getNamespace());
+        putTime(modelMap);
 
         return "user";
     }
@@ -58,13 +54,16 @@ public class UserController {
     @RenderMapping(params = "javax.portlet.action=success")
     public String showGreeting(ModelMap modelMap) {
 
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm, EEEE, d MMMM yyyy G");
+        putTime(modelMap);
 
+        return "greeting";
+    }
+
+    private void putTime(ModelMap modelMap) {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm, EEEE, d MMMM yyyy G");
         Calendar todayCalendar = Calendar.getInstance();
 
         modelMap.put("todaysDate", dateFormat.format(todayCalendar.getTime()));
-
-        return "greeting";
     }
 
     @ActionMapping
@@ -76,9 +75,9 @@ public class UserController {
         _localValidatorFactoryBean.validate(user, bindingResult);
 
         if (!bindingResult.hasErrors()) {
-            if (_logger.isDebugEnabled()) {
-                _logger.debug("firstName=" + user.getFirstName());
-                _logger.debug("lastName=" + user.getLastName());
+            if (log.isDebugEnabled()) {
+                log.debug("firstName=" + user.getFirstName());
+                log.debug("lastName=" + user.getLastName());
             }
 
             actionResponse.setRenderParameter("javax.portlet.action", "success");
